@@ -1,1 +1,0 @@
-// PurchaseList page 

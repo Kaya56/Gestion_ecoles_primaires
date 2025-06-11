@@ -1,1 +1,0 @@
-// TeacherDetail page 

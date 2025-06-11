@@ -1,7 +1,7 @@
 package com.school.management.entity.enums;
 
 public enum UserRole {
-    TEACHER("Enseignant"),
+        TEACHER("Enseignant"),
     ADMIN_STAFF("Personnel Administratif"),
     ACADEMIC_STAFF("Personnel Académique"),
     STUDY_DIRECTOR("Direction des Études");
