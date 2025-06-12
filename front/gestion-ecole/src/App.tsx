@@ -1,8 +1,9 @@
 // src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import Login from './pages/auth/Login';
-// import Dashboard from './pages/Dashboard';
+import DashboardLayout from './components/DashboardLayout';
+import Login from './pages/auth/Login';
+import Dashboard from './pages/Dashboard';
 import StudentList from './pages/students/StudentList';
 import StudentCreate from './pages/students/StudentCreate';
 import StudentDetail from './pages/students/StudentDetail';
@@ -18,30 +19,33 @@ import ClassList from './pages/classes/ClassList';
 import ClassCreate from './pages/classes/ClassCreate';
 import ClassDetail from './pages/classes/ClassDetail';
 import ClassEdit from './pages/classes/ClassEdit';
+import { Typography } from '@mui/material';
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} /> */}
-        <Route path="/students" element={<StudentList />} />
-        <Route path="/students/class/:classId" element={<StudentList />} />
-        <Route path="/students/create" element={<StudentCreate />} />
-        <Route path="/students/:id" element={<StudentDetail />} />
-        <Route path="/teachers" element={<TeacherList />} />
-        <Route path="/teachers/create" element={<TeacherCreate />} />
-        <Route path="/teachers/:id" element={<TeacherDetail />} />
-        <Route path="/teachers/edit/:id" element={<TeacherEdit />} />
-        <Route path="/subjects" element={<SubjectList />} />
-        <Route path="/subjects/create" element={<SubjectCreate />} />
-        <Route path="/subjects/:id" element={<SubjectDetail />} />
-        <Route path="/subjects/edit/:id" element={<SubjectEdit />} />
-        <Route path="/classes" element={<ClassList />} />
-        <Route path="/classes/create" element={<ClassCreate />} />
-        <Route path="/classes/:id" element={<ClassDetail />} />
-        <Route path="/classes/edit/:id" element={<ClassEdit />} />
-        {/* <Route path="*" element={<Typography variant="h4">Page non trouvée</Typography>} /> */}
+        <Route path="/login" element={<Login />} />
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/students" element={<StudentList />} />
+          <Route path="/dashboard/students/class/:classId" element={<StudentList />} />
+          <Route path="/dashboard/students/create" element={<StudentCreate />} />
+          <Route path="/dashboard/students/:id" element={<StudentDetail />} />
+          <Route path="/dashboard/teachers" element={<TeacherList />} />
+          <Route path="/dashboard/teachers/create" element={<TeacherCreate />} />
+          <Route path="/dashboard/teachers/:id" element={<TeacherDetail />} />
+          <Route path="/dashboard/teachers/edit/:id" element={<TeacherEdit />} />
+          <Route path="/dashboard/subjects" element={<SubjectList />} />
+          <Route path="/dashboard/subjects/create" element={<SubjectCreate />} />
+          <Route path="/dashboard/subjects/:id" element={<SubjectDetail />} />
+          <Route path="/dashboard/subjects/edit/:id" element={<SubjectEdit />} />
+          <Route path="/dashboard/classes" element={<ClassList />} />
+          <Route path="/dashboard/classes/create" element={<ClassCreate />} />
+          <Route path="/dashboard/classes/:id" element={<ClassDetail />} />
+          <Route path="/dashboard/classes/edit/:id" element={<ClassEdit />} />
+        </Route>
+        <Route path="*" element={<Typography variant="h4">Page non trouvée</Typography>} />
       </Routes>
     </Router>
   );

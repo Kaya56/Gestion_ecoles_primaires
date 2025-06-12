@@ -12,11 +12,7 @@ interface Class {
   language: 'FRANCOPHONE' | 'ANGLOPHONE';
   academicYear: string;
   maxCapacity: number;
-  teacher?: {
-    id: number;
-    firstName: string;
-    lastName: string;
-  };
+  teacher?: { id: number; firstName: string; lastName: string };
 }
 
 const ClassList: React.FC = () => {
@@ -29,7 +25,7 @@ const ClassList: React.FC = () => {
     const fetchClasses = async () => {
       try {
         const data = await classService.getAllClasses();
-        console.log('Classes reçues:', data); // Débogage
+        console.log('Classes reçues:', data);
         setClasses(data);
       } catch (err: any) {
         setError(err.message || 'Erreur lors du chargement des classes.');
@@ -70,7 +66,7 @@ const ClassList: React.FC = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => navigate('/classes/create')}
+        onClick={() => navigate('/dashboard/classes/create')}
         sx={{ mb: 2 }}
       >
         Ajouter une classe
@@ -104,7 +100,7 @@ const ClassList: React.FC = () => {
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/classes/${classItem.id}`)}
+                    onClick={() => navigate(`/dashboard/classes/${classItem.id}`)}
                   >
                     Détails
                   </Button>

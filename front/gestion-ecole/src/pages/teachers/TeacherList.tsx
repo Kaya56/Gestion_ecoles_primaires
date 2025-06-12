@@ -129,6 +129,7 @@ const TeacherList: React.FC = () => {
                   >
                     Détails
                   </Button>
+                  
                   <Button
                     variant="outlined"
                     color="error"

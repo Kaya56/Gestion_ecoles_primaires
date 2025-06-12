@@ -25,8 +25,8 @@ const ClassCreate: React.FC = () => {
     e.preventDefault();
     try {
       await classService.createClass(formData);
-      console.log('Classe créée, redirection vers: /classes'); // Débogage
-      navigate('/classes');
+      console.log('Classe créée, redirection vers: /dashboard/classes');
+      navigate('/dashboard/classes');
     } catch (error: any) {
       setError(error.message || 'Erreur lors de la création de la classe.');
       console.error('Erreur:', error);
@@ -114,7 +114,7 @@ const ClassCreate: React.FC = () => {
           <Button
             variant="outlined"
             color="secondary"
-            onClick={() => navigate('/classes')}
+            onClick={() => navigate('/dashboard/classes')}
             sx={{ ml: 2 }}
           >
             Annuler

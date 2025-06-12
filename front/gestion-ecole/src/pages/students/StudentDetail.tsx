@@ -32,12 +32,15 @@ const StudentDetail: React.FC = () => {
     const fetchStudent = async () => {
       try {
         if (id) {
-          const data = await studentService.getStudentById(Number(id));
-          setStudent(data);
+          const classId = 1; // Remplace par l'ID de la classe appropriée
+          const data = await studentService.getStudentsByClass(classId);
+          const student = data.find((s: Student) => s.id === Number(id));
+          console.log('Données reçues:', data, 'Étudiant trouvé:', student);
+          setStudent(student || null);
         }
-      } catch (err) {
-        setError('Erreur lors du chargement des détails de l\'étudiant.');
-        console.error(err);
+      } catch (err: any) {
+        setError(err.message || 'Erreur lors du chargement des détails de l\'étudiant.');
+        console.error('Erreur:', err);
       } finally {
         setLoading(false);
       }

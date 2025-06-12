@@ -221,16 +221,17 @@ const ClassDetail: React.FC = () => {
       )}
 
       <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button variant="contained" onClick={() => navigate('/classes')}>
-          Retour à la liste
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => navigate(`/classes/edit/${classItem.id}`)}
-        >
-          Modifier
-        </Button>
+      
+<Button variant="contained" onClick={() => navigate('/dashboard/classes')}>
+  Retour à la liste
+</Button>
+<Button
+  variant="contained"
+  color="secondary"
+  onClick={() => navigate(`/dashboard/classes/edit/${classItem.id}`)}
+>
+  Modifier
+</Button>
         <Button
           variant="contained"
           color="error"
