@@ -1,4 +1,3 @@
-// components/common/Table.tsx
 import React from 'react';
 
 interface Column<T> {
@@ -10,19 +9,19 @@ interface Column<T> {
 }
 
 interface TableProps<T> {
-  data: T[];
+  data: T[] | undefined | null;
   columns: Column<T>[];
   onRowClick?: (row: T) => void;
   loading?: boolean;
   emptyMessage?: string;
 }
 
-export function Table<T>({ 
-  data, 
-  columns, 
-  onRowClick, 
-  loading, 
-  emptyMessage = "Aucune donnée disponible" 
+export function Table<T>({
+  data = [],
+  columns,
+  onRowClick,
+  loading,
+  emptyMessage = 'Aucune donnée disponible',
 }: TableProps<T>) {
   if (loading) {
     return (
@@ -33,7 +32,7 @@ export function Table<T>({
     );
   }
 
-  if (data.length === 0) {
+  if (!data || data.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
         {emptyMessage}

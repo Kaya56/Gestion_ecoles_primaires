@@ -1,38 +1,32 @@
-import React, { useState } from "react";
-import type { FC, ChangeEvent } from "react";
+import React, { useState } from 'react';
+import type { FC, ChangeEvent } from 'react';
 
-// SearchBar component 
 interface SearchBarProps {
-    placeholder?: string;
-    onSearch: (query: string) => void;
-    value?: string;
+  placeholder?: string;
+  onSearch: (query: string) => void;
+  value?: string;
+  className?: string;
 }
 
-const SearchBar: FC<SearchBarProps> = ({ placeholder = "Rechercher...", onSearch, value = "" }) => {
-    const [inputValue, setInputValue] = useState<string>(value);
+const SearchBar: FC<SearchBarProps> = ({ placeholder = 'Rechercher...', onSearch, value = '', className = '' }) => {
+  const [inputValue, setInputValue] = useState<string>(value);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
-        onSearch(e.target.value);
-    };
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    onSearch(e.target.value);
+  };
 
-    return (
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <input
-                type="text"
-                placeholder={placeholder}
-                value={inputValue}
-                onChange={handleChange}
-                style={{
-                    padding: "8px 12px",
-                    borderRadius: "4px",
-                    border: "1px solid #ccc",
-                    width: "100%",
-                    fontSize: "1rem"
-                }}
-            />
-        </div>
-    );
+  return (
+    <div className={`flex items-center ${className}`}>
+      <input
+        type="text"
+        placeholder={placeholder}
+        value={inputValue}
+        onChange={handleChange}
+        className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border-gray-300"
+      />
+    </div>
+  );
 };
 
 export default SearchBar;

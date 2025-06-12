@@ -1,13 +1,22 @@
-// discipline types 
 export interface Discipline {
-    id: number;
-    nom: string;
-    description?: string;
-    coefficient?: number;
-    createdAt?: string;
-    updatedAt?: string;
+  id: number;
+  studentId?: number;
+  studentName: string;
+  type: string;
+  incidentDate: string;
+  description: string;
+  action?: string;
+  resolved: boolean;
+  createdAt: string;
+  reportedBy?: string;
 }
 
-export type CreateDisciplineDto = Omit<Discipline, 'id' | 'createdAt' | 'updatedAt'>;
-
-export type UpdateDisciplineDto = Partial<CreateDisciplineDto>;
+export interface DisciplineCreateRequest {
+  studentId: number;
+  type: string;
+  incidentDate: string;
+  description: string;
+  action?: string;
+  reportedBy?: string;
+  resolved: boolean;
+}
