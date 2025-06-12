@@ -108,14 +108,14 @@ const DisciplineCreate: React.FC = () => {
         <Input
           label="Action prise"
           type="text"
-          value={formData.action}
+          value={formData.action ?? ""}
           onChange={handleInputChange('action')}
           placeholder="Action prise (optionnel)"
         />
         <Input
           label="Signalé par"
           type="text"
-          value={formData.reportedBy}
+          value={formData.reportedBy ?? ""}
           onChange={handleInputChange('reportedBy')}
           placeholder="Nom de la personne qui a signalé"
         />

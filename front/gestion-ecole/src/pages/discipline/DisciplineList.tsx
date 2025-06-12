@@ -4,9 +4,9 @@ import type { Discipline } from '../../types/discipline.types';
 import { getDisciplines, deleteDiscipline } from '../../services/discipline.service';
 import { Table } from '../../components/common/Table';
 import { Button } from '../../components/common/Button';
-import { SearchBar } from '../../components/common/SearchBar';
-import { Pagination } from '../../components/common/Pagination';
-import { Loading } from '../../components/common/Loading';
+import SearchBar from '../../components/common/SearchBar';
+import  Pagination  from '../../components/common/Pagination';
+import  Loading  from '../../components/common/Loading';
 
 interface DisciplineResponse {
   content: Discipline[] | undefined;

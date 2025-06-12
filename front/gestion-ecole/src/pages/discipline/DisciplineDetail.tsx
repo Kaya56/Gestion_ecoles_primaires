@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Discipline } from '../../types/discipline.types';
+import type { Discipline } from '../../types/discipline.types';
 import { getDisciplineById } from '../../services/discipline.service';
 import { useToast } from '../../hooks/useToast';
-import Button from '../../components/common/Button';
-import Card from '../../components/common/Card';
+import { Button } from '../../components/common/Button';
+import { Card } from '../../components/common/Card';
 
 const DisciplineDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
