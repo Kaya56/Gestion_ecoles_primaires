@@ -15,6 +15,8 @@ import {
   CssBaseline,
   useMediaQuery,
   useTheme,
+  ListSubheader,
+  Collapse,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -24,6 +26,8 @@ import {
   Person as PersonIcon,
   Book as BookIcon,
   ExitToApp as ExitToAppIcon,
+  ExpandLess,
+  ExpandMore,
 } from '@mui/icons-material';
 
 const drawerWidth = 240;
@@ -33,18 +37,30 @@ const DashboardLayout: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openStudentMenu, setOpenStudentMenu] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleStudentMenuToggle = () => {
+    setOpenStudentMenu(!openStudentMenu);
+  };
+
   const menuItems = [
     { text: 'Tableau de bord', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Classes', icon: <SchoolIcon />, path: '/dashboard/classes' },
-    { text: 'Étudiants', icon: <PeopleIcon />, path: '/dashboard/students' },
+    {
+      text: 'Étudiants',
+      icon: <PeopleIcon />,
+      subMenu: [
+        { text: 'Liste des étudiants', path: '/dashboard/students' },
+        { text: 'Ajouter un étudiant', path: '/dashboard/students/create' },
+      ],
+    },
     { text: 'Enseignants', icon: <PersonIcon />, path: '/dashboard/teachers' },
     { text: 'Matières', icon: <BookIcon />, path: '/dashboard/subjects' },
-    { text: 'Déconnexion', icon: <ExitToAppIcon />, path: '/login' },
+    { text: 'Déconnexion', icon: <ExitToAppIcon />, path: '/dashboard/login' },
   ];
 
   const drawer = (
@@ -55,12 +71,36 @@ const DashboardLayout: React.FC = () => {
         </Typography>
       </Toolbar>
       <List>
-        {menuItems.map((item) => (
-          <ListItem button key={item.text} onClick={() => navigate(item.path)}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
+        {menuItems.map((item) =>
+          item.subMenu ? (
+            <React.Fragment key={item.text}>
+              <ListItem button onClick={handleStudentMenuToggle}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+                {openStudentMenu ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={openStudentMenu} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {item.subMenu.map((subItem) => (
+                    <ListItem
+                      button
+                      key={subItem.text}
+                      sx={{ pl: 4 }}
+                      onClick={() => navigate(subItem.path)}
+                    >
+                      <ListItemText primary={subItem.text} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            </React.Fragment>
+          ) : (
+            <ListItem button key={item.text} onClick={() => navigate(item.path)}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          )
+        )}
       </List>
     </div>
   );

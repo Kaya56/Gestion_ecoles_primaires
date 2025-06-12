@@ -144,7 +144,7 @@ const TeacherCreate: React.FC = () => {
           <Button
             variant="outlined"
             color="secondary"
-            onClick={() => navigate('/teachers')}
+            onClick={() => navigate('/dashboard/teachers')}
             sx={{ ml: 2 }}
           >
             Annuler

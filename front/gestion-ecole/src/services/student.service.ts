@@ -1,3 +1,4 @@
+// src/services/student.service.ts
 import api from './api.service';
 
 export const studentService = {
@@ -7,17 +8,7 @@ export const studentService = {
       const response = await api.get('/students');
       return response.data;
     } catch (error: any) {
-      throw new Error('Échec de la récupération des étudiants : ' + error.message);
-    }
-  },
-
-  // Récupérer les étudiants par classe
-  getStudentsByClass: async (classId: number) => {
-    try {
-      const response = await api.get(`/students/class/${classId}`);
-      return response.data;
-    } catch (error: any) {
-      throw new Error('Échec de la récupération des étudiants par classe : ' + error.message);
+      throw new Error(error.response?.data?.message || 'Erreur lors de la récupération des étudiants');
     }
   },
 
@@ -27,30 +18,46 @@ export const studentService = {
       const response = await api.get(`/students/${id}`);
       return response.data;
     } catch (error: any) {
-      throw new Error('Échec de la récupération de l\'étudiant : ' + error.message);
+      throw new Error(error.response?.data?.message || 'Erreur lors de la récupération de l\'étudiant');
     }
   },
 
   // Créer un étudiant
-  createStudent: async (studentData: {
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    gender: string;
-    section: string;
-    language: string;
-    academicYear: string;
-    parentName: string;
-    parentPhone: string;
-    parentEmail: string;
-    address: string;
-    classId: number;
-  }) => {
+  createStudent: async (studentData: any) => {
     try {
       const response = await api.post('/students', studentData);
       return response.data;
     } catch (error: any) {
-      throw new Error('Échec de la création de l\'étudiant : ' + error.message);
+      throw new Error(error.response?.data?.message || 'Erreur lors de la création de l\'étudiant');
+    }
+  },
+
+  // Mettre à jour un étudiant
+  updateStudent: async (id: number, studentData: any) => {
+    try {
+      const response = await api.put(`/students/${id}`, studentData);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Erreur lors de la mise à jour de l\'étudiant');
+    }
+  },
+
+  // Supprimer un étudiant
+  deleteStudent: async (id: number) => {
+    try {
+      await api.delete(`/students/${id}`);
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Erreur lors de la suppression de l\'étudiant');
+    }
+  },
+
+  // Récupérer les étudiants par classe (optionnel)
+  getStudentsByClass: async (classId: number) => {
+    try {
+      const response = await api.get(`/students/class/${classId}`);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Erreur lors de la récupération des étudiants de la classe');
     }
   },
 };

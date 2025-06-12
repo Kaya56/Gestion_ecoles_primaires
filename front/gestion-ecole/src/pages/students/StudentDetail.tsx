@@ -1,24 +1,22 @@
+// src/pages/students/StudentDetail.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { studentService } from '../../services/student.service';
-import { Container, Typography, Box, Button, Grid, CircularProgress, Paper, Alert } from '@mui/material';
+import { Container, Typography, Box, Button, Grid, CircularProgress, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 interface Student {
   id: number;
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
-  gender: string;
-  section: string;
-  language: string;
-  academicYear: string;
-  parentName: string;
-  parentPhone: string;
-  parentEmail: string;
-  address: string;
-  className: string;
-  registrationDate: string;
-  classId?: number; // Ajouté car il peut être renvoyé par l'API
+  email: string;
+  gender?: string;
+  birthDate?: string;
+  parentName?: string;
+  parentEmail?: string;
+  parentPhone?: string;
+  registrationDate?: string;
+  section?: 'CRECHE' | 'MATERNELLE' | 'PRIMAIRE';
+  studentClass?: { id: number; name: string };
 }
 
 const StudentDetail: React.FC = () => {
@@ -27,19 +25,18 @@ const StudentDetail: React.FC = () => {
   const [student, setStudent] = useState<Student | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     const fetchStudent = async () => {
       try {
         if (id) {
-          const classId = 1; // Remplace par l'ID de la classe appropriée
-          const data = await studentService.getStudentsByClass(classId);
-          const student = data.find((s: Student) => s.id === Number(id));
-          console.log('Données reçues:', data, 'Étudiant trouvé:', student);
-          setStudent(student || null);
+          const data = await studentService.getStudentById(Number(id));
+          console.log('Étudiant reçu:', data);
+          setStudent(data);
         }
       } catch (err: any) {
-        setError(err.message || 'Erreur lors du chargement des détails de l\'étudiant.');
+        setError(err.message);
         console.error('Erreur:', err);
       } finally {
         setLoading(false);
@@ -47,6 +44,23 @@ const StudentDetail: React.FC = () => {
     };
     fetchStudent();
   }, [id]);
+
+  const handleDelete = async () => {
+    try {
+      if (id) {
+        await studentService.deleteStudent(Number(id));
+        console.log('Étudiant supprimé, redirection vers: /dashboard/students');
+        navigate('/dashboard/students');
+      }
+    } catch (err: any) {
+      setError(err.message);
+      console.error('Erreur:', err);
+    }
+    setOpenDialog(false);
+  };
+
+  const handleOpenDialog = () => setOpenDialog(true);
+  const handleCloseDialog = () => setOpenDialog(false);
 
   if (loading) {
     return (
@@ -62,7 +76,7 @@ const StudentDetail: React.FC = () => {
         <Alert severity="error" sx={{ mb: 2 }}>
           {error || 'Étudiant non trouvé.'}
         </Alert>
-        <Button variant="contained" onClick={() => navigate('/students')}>
+        <Button variant="contained" onClick={() => navigate('/dashboard/students')}>
           Retour à la liste
         </Button>
       </Container>
@@ -74,83 +88,74 @@ const StudentDetail: React.FC = () => {
       <Typography variant="h4" gutterBottom>
         Détails de l'étudiant
       </Typography>
-      <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+      <Box sx={{ p: 3, border: '1px solid #ddd', borderRadius: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Prénom :</strong> {student.firstName}
-            </Typography>
+            <Typography><strong>Prénom :</strong> {student.firstName}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Nom :</strong> {student.lastName}
-            </Typography>
+            <Typography><strong>Nom :</strong> {student.lastName}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Date de naissance :</strong> {new Date(student.dateOfBirth).toLocaleDateString()}
-            </Typography>
+            <Typography><strong>Email :</strong> {student.email}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Genre :</strong> {student.gender === 'MALE' ? 'Masculin' : 'Féminin'}
-            </Typography>
+            <Typography><strong>Genre :</strong> {student.gender || 'Non spécifié'}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Section :</strong> {student.section}
-            </Typography>
+            <Typography><strong>Date de naissance :</strong> {student.birthDate || 'Non spécifiée'}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Langue :</strong> {student.language}
-            </Typography>
+            <Typography><strong>Nom du parent :</strong> {student.parentName || 'Non spécifié'}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Année académique :</strong> {student.academicYear}
-            </Typography>
+            <Typography><strong>Email du parent :</strong> {student.parentEmail || 'Non spécifié'}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Nom du parent :</strong> {student.parentName}
-            </Typography>
+            <Typography><strong>Téléphone du parent :</strong> {student.parentPhone || 'Non spécifié'}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Téléphone du parent :</strong> {student.parentPhone}
-            </Typography>
+            <Typography><strong>Date d'inscription :</strong> {student.registrationDate || 'Non spécifiée'}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Email du parent :</strong> {student.parentEmail}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="subtitle1">
-              <strong>Adresse :</strong> {student.address}
-            </Typography>
+            <Typography><strong>Section :</strong> {student.section || 'Non spécifiée'}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Classe :</strong> {student.className}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1">
-              <strong>Date d'inscription :</strong> {new Date(student.registrationDate).toLocaleDateString()}
-            </Typography>
+            <Typography><strong>Classe :</strong> {student.studentClass?.name || 'Aucune'}</Typography>
           </Grid>
         </Grid>
-      </Paper>
-      <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button
-          variant="contained"
-          onClick={() => navigate(student.classId ? `/students/class/${student.classId}` : '/students')}
-        >
+      </Box>
+      <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+        <Button variant="contained" onClick={() => navigate('/dashboard/students')}>
           Retour à la liste
         </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => navigate(`/dashboard/students/edit/${student.id}`)}
+        >
+          Modifier
+        </Button>
+        <Button variant="contained" color="error" onClick={handleOpenDialog}>
+          Supprimer
+        </Button>
       </Box>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirmer la suppression</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Êtes-vous sûr de vouloir supprimer l'étudiant {student.firstName} {student.lastName} ? Cette action est irréversible.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Annuler
+          </Button>
+          <Button onClick={handleDelete} color="error">
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

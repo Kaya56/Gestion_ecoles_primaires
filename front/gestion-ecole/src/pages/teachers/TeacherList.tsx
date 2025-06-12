@@ -94,7 +94,7 @@ const TeacherList: React.FC = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => navigate('/teachers/create')}
+        onClick={() => navigate('/dashboard/teachers/create')}
         sx={{ mb: 2 }}
       >
         Ajouter un enseignant
@@ -124,7 +124,7 @@ const TeacherList: React.FC = () => {
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/teachers/${teacher.id}`)}
+                    onClick={() => navigate(`/dashboard/teachers/${teacher.id}`)}
                     sx={{ mr: 1 }}
                   >
                     Détails

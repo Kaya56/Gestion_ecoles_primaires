@@ -68,7 +68,7 @@ const SubjectList: React.FC = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => navigate('/subjects/create')}
+        onClick={() => navigate('/dashboard/subjects/create')}
         sx={{ mb: 2 }}
       >
         Ajouter une matière
@@ -100,7 +100,7 @@ const SubjectList: React.FC = () => {
                 <TableCell>
                   <Button
                     variant="outlined"
-                    onClick={() => navigate(`/subjects/${subject.id}`)}
+                    onClick={() => navigate(`/dashboard/subjects/${subject.id}`)}
                   >
                     Détails
                   </Button>

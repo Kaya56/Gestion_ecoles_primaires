@@ -74,7 +74,7 @@ const SubjectDetail: React.FC = () => {
         <Alert severity="error" sx={{ mb: 2 }}>
           {error || 'Matière non trouvée.'}
         </Alert>
-        <Button variant="contained" onClick={() => navigate('/subjects')}>
+        <Button variant="contained" onClick={() => navigate('/dashboard/subjects')}>
           Retour à la liste
         </Button>
       </Container>
@@ -137,13 +137,13 @@ const SubjectDetail: React.FC = () => {
         </Grid>
       </Paper>
       <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button variant="contained" onClick={() => navigate('/subjects')}>
+        <Button variant="contained" onClick={() => navigate('/dashboard/subjects')}>
           Retour à la liste
         </Button>
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => navigate(`/subjects/edit/${subject.id}`)}
+          onClick={() => navigate(`/dashboard/subjects/edit/${subject.id}`)}
         >
           Modifier
         </Button>

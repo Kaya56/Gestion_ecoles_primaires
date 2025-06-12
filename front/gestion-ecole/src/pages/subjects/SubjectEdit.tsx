@@ -184,7 +184,7 @@ const SubjectEdit: React.FC = () => {
           <Button
             variant="outlined"
             color="secondary"
-            onClick={() => navigate('/subjects')}
+            onClick={() => navigate('/dashboard/subjects')}
             sx={{ ml: 2 }}
           >
             Annuler

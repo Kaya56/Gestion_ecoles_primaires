@@ -48,7 +48,7 @@ const TeacherDetail: React.FC = () => {
       if (id) {
         await teacherService.deleteTeacher(Number(id));
         console.log('Enseignant supprimé, redirection vers: /teachers'); // Débogage
-        navigate('/teachers');
+        navigate('/dashboard/teachers');
       }
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la suppression de l\'enseignant.');
@@ -74,7 +74,7 @@ const TeacherDetail: React.FC = () => {
         <Alert severity="error" sx={{ mb: 2 }}>
           {error || 'Enseignant non trouvé.'}
         </Alert>
-        <Button variant="contained" onClick={() => navigate('/teachers')}>
+        <Button variant="contained" onClick={() => navigate('/dashboard/teachers')}>
           Retour à la liste
         </Button>
       </Container>
@@ -145,7 +145,7 @@ const TeacherDetail: React.FC = () => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => navigate(`/teachers/edit/${teacher.id}`)}
+          onClick={() => navigate(`/dashboard/teachers/edit/${teacher.id}`)}
         >
           Modifier
         </Button>
