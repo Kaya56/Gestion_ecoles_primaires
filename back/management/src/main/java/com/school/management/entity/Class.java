@@ -1,12 +1,14 @@
 // entity/Class.java
 package com.school.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.school.management.entity.enums.Language;
 import com.school.management.entity.enums.Section;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +44,11 @@ public class Class {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
+    @JsonBackReference // Évite la sérialisation récursive vers Teacher
     private Teacher teacher;
 
     @OneToMany(mappedBy = "studentClass", fetch = FetchType.LAZY)
+    @JsonIgnore // Exclut les étudiants de la sérialisation
     private List<Student> students = new ArrayList<>();
 
     @ManyToMany

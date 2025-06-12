@@ -1,45 +1,91 @@
-// src/pages/teachers/TeacherCreate.tsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/pages/teachers/TeacherEdit.tsx
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { teacherService } from '../../services/teacher.service';
-import { TextField, Button, MenuItem, Container, Typography, Box, Alert } from '@mui/material';
+import { TextField, Button, MenuItem, Container, Typography, Box, Alert, CircularProgress } from '@mui/material';
 
-const TeacherCreate: React.FC = () => {
+interface Teacher {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  gender: 'MALE' | 'FEMALE';
+  birthDate: string;
+  hireDate: string;
+  specialization: string;
+  taskDescription: string;
+}
+
+const TeacherEdit: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    gender: '',
-    birthDate: '',
-    hireDate: '',
-    specialization: '',
-    taskDescription: '',
-  });
+  const [formData, setFormData] = useState<Teacher | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTeacher = async () => {
+      try {
+        if (id) {
+          const data = await teacherService.getTeacherById(Number(id));
+          console.log('Enseignant à modifier:', data); // Débogage
+          setFormData(data);
+        }
+      } catch (err: any) {
+        setError(err.message || 'Erreur lors du chargement de l\'enseignant.');
+        console.error('Erreur:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTeacher();
+  }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => prev ? { ...prev, [name]: value } : null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await teacherService.createTeacher(formData);
-      console.log('Enseignant créé, redirection vers: /teachers'); // Débogage
-      navigate('/teachers');
+      if (id && formData) {
+        await teacherService.updateTeacher(Number(id), formData);
+        console.log('Enseignant mis à jour, redirection vers: /teachers'); // Débogage
+        navigate('/teachers');
+      }
     } catch (error: any) {
-      setError(error.message || 'Erreur lors de la création de l\'enseignant.');
+      setError(error.message || 'Erreur lors de la mise à jour de l\'enseignant.');
       console.error('Erreur:', error);
     }
   };
 
+  if (loading) {
+    return (
+      <Container sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  if (error || !formData) {
+    return (
+      <Container>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error || 'Enseignant non trouvé.'}
+        </Alert>
+        <Button variant="contained" onClick={() => navigate('/teachers')}>
+          Retour à la liste
+        </Button>
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
-        Ajouter un enseignant
+        Modifier un enseignant
       </Typography>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -139,7 +185,7 @@ const TeacherCreate: React.FC = () => {
         />
         <Box sx={{ mt: 2 }}>
           <Button type="submit" variant="contained" color="primary">
-            Créer
+            Mettre à jour
           </Button>
           <Button
             variant="outlined"
@@ -155,4 +201,4 @@ const TeacherCreate: React.FC = () => {
   );
 };
 
-export default TeacherCreate;
+export default TeacherEdit;

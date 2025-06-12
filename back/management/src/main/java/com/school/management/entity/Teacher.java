@@ -1,6 +1,7 @@
 // entity/Teacher.java
 package com.school.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.school.management.entity.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ public class Teacher {
 
     // Matières où cet enseignant est le principal
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
+    @JsonManagedReference // Gère la sérialisation vers Class
     private List<Subject> primarySubjects = new ArrayList<>();
 
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 // entity/Student.java
 package com.school.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.school.management.entity.enums.Gender;
 import com.school.management.entity.enums.Language;
 import com.school.management.entity.enums.Section;
@@ -56,6 +57,7 @@ public class Student {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id")
+    @JsonBackReference // Évite la sérialisation récursive vers Class
     private Class studentClass;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

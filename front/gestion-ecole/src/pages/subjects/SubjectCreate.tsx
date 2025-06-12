@@ -1,37 +1,36 @@
-// src/pages/teachers/TeacherCreate.tsx
+// src/pages/subjects/SubjectCreate.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { teacherService } from '../../services/teacher.service';
+import { subjectService } from '../../services/subject.service';
 import { TextField, Button, MenuItem, Container, Typography, Box, Alert } from '@mui/material';
 
-const TeacherCreate: React.FC = () => {
+const SubjectCreate: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    gender: '',
-    birthDate: '',
-    hireDate: '',
-    specialization: '',
-    taskDescription: '',
+    name: '',
+    code: '',
+    description: '',
+    section: '',
+    language: '',
+    level: '',
+    credits: 1,
+    coefficient: 1,
   });
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: name === 'credits' || name === 'coefficient' ? Number(value) : value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await teacherService.createTeacher(formData);
-      console.log('Enseignant créé, redirection vers: /teachers'); // Débogage
-      navigate('/teachers');
+      await subjectService.createSubject(formData);
+      console.log('Matière créée, redirection vers: /subjects'); // Débogage
+      navigate('/subjects');
     } catch (error: any) {
-      setError(error.message || 'Erreur lors de la création de l\'enseignant.');
+      setError(error.message || 'Erreur lors de la création de la matière.');
       console.error('Erreur:', error);
     }
   };
@@ -39,7 +38,7 @@ const TeacherCreate: React.FC = () => {
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
-        Ajouter un enseignant
+        Ajouter une matière
       </Typography>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -49,93 +48,86 @@ const TeacherCreate: React.FC = () => {
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
         <TextField
           fullWidth
-          label="Prénom"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          margin="normal"
-          required
-        />
-        <TextField
-          fullWidth
           label="Nom"
-          name="lastName"
-          value={formData.lastName}
+          name="name"
+          value={formData.name}
           onChange={handleChange}
           margin="normal"
           required
         />
         <TextField
           fullWidth
-          label="Email"
-          name="email"
-          type="email"
-          value={formData.email}
+          label="Code"
+          name="code"
+          value={formData.code}
           onChange={handleChange}
           margin="normal"
           required
         />
         <TextField
           fullWidth
-          label="Téléphone"
-          name="phone"
-          value={formData.phone}
+          label="Description"
+          name="description"
+          multiline
+          rows={4}
+          value={formData.description}
           onChange={handleChange}
           margin="normal"
         />
         <TextField
           fullWidth
           select
-          label="Genre"
-          name="gender"
-          value={formData.gender}
+          label="Section"
+          name="section"
+          value={formData.section}
           onChange={handleChange}
           margin="normal"
           required
         >
-          <MenuItem value="MALE">Masculin</MenuItem>
-          <MenuItem value="FEMALE">Féminin</MenuItem>
+          <MenuItem value="CRECHE">Crèche</MenuItem>
+          <MenuItem value="MATERNELLE">Maternelle</MenuItem>
+          <MenuItem value="PRIMAIRE">Primaire</MenuItem>
         </TextField>
         <TextField
           fullWidth
-          label="Date de naissance"
-          name="birthDate"
-          type="date"
-          value={formData.birthDate}
+          select
+          label="Langue"
+          name="language"
+          value={formData.language}
           onChange={handleChange}
           margin="normal"
-          InputLabelProps={{ shrink: true }}
+          required
+        >
+          <MenuItem value="FRANCOPHONE">Francophone</MenuItem>
+          <MenuItem value="ANGLOPHONE">Anglophone</MenuItem>
+        </TextField>
+        <TextField
+          fullWidth
+          label="Niveau"
+          name="level"
+          value={formData.level}
+          onChange={handleChange}
+          margin="normal"
+        />
+        <TextField
+          fullWidth
+          label="Crédits"
+          name="credits"
+          type="number"
+          value={formData.credits}
+          onChange={handleChange}
+          margin="normal"
           required
         />
         <TextField
           fullWidth
-          label="Date d'embauche"
-          name="hireDate"
-          type="date"
-          value={formData.hireDate}
-          onChange={handleChange}
-          margin="normal"
-          InputLabelProps={{ shrink: true }}
-          required
-        />
-        <TextField
-          fullWidth
-          label="Spécialisation"
-          name="specialization"
-          value={formData.specialization}
+          label="Coefficient"
+          name="coefficient"
+          type="number"
+          value={formData.coefficient}
           onChange={handleChange}
           margin="normal"
           required
-        />
-        <TextField
-          fullWidth
-          label="Description des tâches"
-          name="taskDescription"
-          multiline
-          rows={4}
-          value={formData.taskDescription}
-          onChange={handleChange}
-          margin="normal"
         />
         <Box sx={{ mt: 2 }}>
           <Button type="submit" variant="contained" color="primary">
@@ -144,7 +136,7 @@ const TeacherCreate: React.FC = () => {
           <Button
             variant="outlined"
             color="secondary"
-            onClick={() => navigate('/teachers')}
+            onClick={() => navigate('/subjects')}
             sx={{ ml: 2 }}
           >
             Annuler
@@ -155,4 +147,4 @@ const TeacherCreate: React.FC = () => {
   );
 };
 
-export default TeacherCreate;
+export default SubjectCreate;

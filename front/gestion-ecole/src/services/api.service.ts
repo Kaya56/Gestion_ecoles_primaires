@@ -126,6 +126,8 @@ export const apiUtils = {
   },
 };
 
+
+
 // Export des instances axios pour usage direct si nécessaire
 export { api, apiUpload };
 export default api;
